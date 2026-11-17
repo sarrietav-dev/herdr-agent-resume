@@ -78,6 +78,14 @@ def digest(path):
 def atomic_json(path, value):
     # Follow symlinks (stow and dotfile managers): replace the file, not the link.
     path = Path(os.path.realpath(path))
+    if path.is_file():
+        try:
+            # Don't rewrite a file whose JSON already equals the new value: that
+            # would reformat someone else's compact JSON for no reason.
+            if json.loads(path.read_text()) == value:
+                return
+        except ValueError:
+            pass
     path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile(mode="w", dir=path.parent, prefix=".agent-resume-", delete=False) as stream:
         json.dump(value, stream, indent=2, ensure_ascii=False)
