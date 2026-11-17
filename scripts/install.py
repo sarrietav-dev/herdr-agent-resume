@@ -76,6 +76,8 @@ def digest(path):
 
 
 def atomic_json(path, value):
+    # Follow symlinks (stow and dotfile managers): replace the file, not the link.
+    path = Path(os.path.realpath(path))
     path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile(mode="w", dir=path.parent, prefix=".agent-resume-", delete=False) as stream:
         json.dump(value, stream, indent=2, ensure_ascii=False)
@@ -220,6 +222,8 @@ def write_hook(path, config):
 
 
 def write_text(path, text):
+    # Follow symlinks (stow and dotfile managers): replace the file, not the link.
+    path = Path(os.path.realpath(path))
     path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile(mode="w", dir=path.parent, prefix=".agent-resume-", delete=False) as stream:
         stream.write(text)
