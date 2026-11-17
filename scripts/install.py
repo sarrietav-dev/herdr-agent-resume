@@ -435,7 +435,16 @@ def main():
         subprocess.run(["herdr-app", "check", str(source)], env=env, check=True)
     changes = [(path, new) for (path, new), (_, _, old, _) in zip(edited, configs) if new != old]
 
-    print(f"Mod: {destination}\nShortcut: Ctrl+Shift+R")
+    print(f"Mod: {destination}")
+    if snippet:
+        shortcuts = ", ".join(
+            f"{section}: {key} ({action})"
+            for section, bindings in snippet.items()
+            for key, action in bindings.items()
+        )
+        print(f"Shortcut: {shortcuts}")
+    else:
+        print("Shortcut: none (this fork adds no key binding)")
     for path, _ in changes:
         print(f"Hook: {path}")
     for path, text in pi:

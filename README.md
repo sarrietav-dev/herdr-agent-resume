@@ -1,5 +1,23 @@
 # herdr-agent-resume
 
+This is a local fork of [thuanlm215/herdr-agent-resume](https://github.com/thuanlm215/herdr-agent-resume) with two changes:
+
+- **No key binding.** `keys.json` is empty, so installing never rebinds a key
+  or conflicts with one you already use. The automatic mode needs no shortcut.
+- **Dotfile symlinks are kept.** The installer resolves `~/.bashrc` and
+  `~/.zshrc` before writing, so a stow-managed file stays a symlink.
+- **Idempotent JSON writes.** A reinstall with no changes no longer reformats
+  `keys.json` or an agent's hook file.
+
+Install the automatic mode:
+
+```sh
+python3 scripts/install.py --auto
+```
+
+Updates from upstream: `git pull --rebase`, then
+`python3 scripts/install.py --update --auto`.
+
 [![Claude Code](https://img.shields.io/badge/Claude_Code-D97757?style=flat-square)](#install)
 [![Codex](https://img.shields.io/badge/Codex-111827?style=flat-square)](#install)
 [![Grok](https://img.shields.io/badge/Grok-18181B?style=flat-square)](#install)
